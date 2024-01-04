@@ -1,10 +1,70 @@
-import React, { useState } from 'react'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth'
+import React, { useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { auth } from '../utils/firebase'
+import { addUser } from '../utils/userSlice'
+import { checkValidData } from '../utils/validate'
 import Header from './Header'
 
 const Login = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector(store => store.user)
   const [isSignInForm, setIsSignInForm] = useState(true)
+  const [errorMessage, setErrorMessage] = useState(null)
+  const emailID = useRef(null)
+  const password = useRef(null)
+  const name = useRef(null)
+
   const toggleSignInForm = () => {
     setIsSignInForm(!isSignInForm)
+  }
+  const handleButtonClick = () => {
+    const validation = checkValidData(emailID.current.value, password.current.value)
+    setErrorMessage(validation)
+
+    if(errorMessage) return;
+
+    if(!isSignInForm){
+      createUserWithEmailAndPassword(auth, emailID.current.value, password.current.value)
+      .then((userCredential) => {
+        // Signed up 
+        const user = userCredential.user;
+        
+        updateProfile(user, {
+          displayName: name.current.value, photoURL:''
+        }).then(() => {
+          console.log('auth.currentUser',auth.currentUser)
+          const {uid, email, displayName} = auth.currentUser;
+          dispatch(addUser({email: email, uid: uid, displayName: displayName}))
+          // Profile updated!
+          navigate('/browse')
+        }).catch((error) => {
+          // An error occurred
+          setErrorMessage(error)
+        });
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        setErrorMessage(errorCode + errorMessage)
+        // ..
+      });
+    }else{
+      signInWithEmailAndPassword(auth, emailID.current.value, password.current.value)
+      .then((userCredential) => {
+        // Signed in 
+        const user = userCredential.user;
+        navigate('/browse')
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        setErrorMessage(errorCode + errorMessage)
+      });
+    }
   }
   return (
     <div>
@@ -13,21 +73,26 @@ const Login = () => {
         <img 
           src='https://assets.nflxext.com/ffe/siteui/vlv3/c31c3123-3df7-4359-8b8c-475bd2d9925d/15feb590-3d73-45e9-9e4a-2eb334c83921/IN-en-20231225-popsignuptwoweeks-perspective_alpha_website_large.jpg' alt='banner' />
       </div>
-      <form className='absolute bg-black py-12 my-36 mx-auto right-0 left-0 p-4 w-3/12 text-white rounded-lg bg-opacity-80'>
+      <form onSubmit={(e) => e.preventDefault()} className='absolute bg-black py-12 my-36 mx-auto right-0 left-0 p-4 w-3/12 text-white rounded-lg bg-opacity-80'>
         <h1 className='font-bold text-3xl'>{isSignInForm ? 'Sign In' : 'Sign Up'}</h1>
         {!isSignInForm && <input 
+          ref={name}
           type='text' 
           placeholder='enter your name' 
           className='my-4 p-4 w-full bg-gray-700'/>}
-        <input 
+        <input
+          ref={emailID}
           type='text' 
           placeholder='enter your email' 
           className='my-4 p-4 w-full bg-gray-700'/>
-        <input 
+        <input
+          ref={password}
           type='password' 
           placeholder='enter your password' 
           className='my-4 p-4 w-full bg-gray-700'/>
-        <button 
+        {errorMessage && <p className='text-red-500'>{errorMessage}</p>}
+        <button
+          onClick={handleButtonClick}
           type='submit' 
           className='my-4 p-4 bg-red-700 w-full rounded-lg'>
             {isSignInForm ? 'Sign In' : 'Sign Up'}
