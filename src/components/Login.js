@@ -2,6 +2,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfi
 import React, { useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { BANNER } from '../utils/constant'
 import { auth } from '../utils/firebase'
 import { addUser } from '../utils/userSlice'
 import { checkValidData } from '../utils/validate'
@@ -71,7 +72,7 @@ const Login = () => {
       <Header/>
       <div className='absolute'>
         <img 
-          src='https://assets.nflxext.com/ffe/siteui/vlv3/c31c3123-3df7-4359-8b8c-475bd2d9925d/15feb590-3d73-45e9-9e4a-2eb334c83921/IN-en-20231225-popsignuptwoweeks-perspective_alpha_website_large.jpg' alt='banner' />
+          src={BANNER} alt='banner' />
       </div>
       <form onSubmit={(e) => e.preventDefault()} className='absolute bg-black py-12 my-36 mx-auto right-0 left-0 p-4 w-3/12 text-white rounded-lg bg-opacity-80'>
         <h1 className='font-bold text-3xl'>{isSignInForm ? 'Sign In' : 'Sign Up'}</h1>
