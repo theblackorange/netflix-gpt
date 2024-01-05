@@ -9,7 +9,7 @@ export const useMovieTrailer = (movieId) => {
         const data = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?language=en-US`, API_OPTIONS)
         const videoArray = await data.json();
         const filteredData = videoArray.results.filter(video => video.type === 'Trailer')
-        const trailer = filteredData[0] ?? videoArray.results[0]
+        const trailer = filteredData[12] ?? videoArray.results[0]
         dispatch(addTrailerVideo(trailer))
     }
     useEffect(()=>{
