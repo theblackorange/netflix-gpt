@@ -25,3 +25,5 @@ export const LANGUAGES = [
     value: 'spanish'
   }
 ]
+
+export const OPENAI_KEY = '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'

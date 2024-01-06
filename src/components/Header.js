@@ -12,6 +12,7 @@ const Header = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate();
   const user = useSelector(store => store.user)
+  const gpt = useSelector(store => store.gpt)
   const signout = () => {
     signOut(auth).then(() => {
       // Sign-out successful.
@@ -58,7 +59,7 @@ const Header = () => {
             )}
             
           </select>
-          <button className='bg-green-900 p-2 m-4 rounded-lg' onClick={handleGptSearch}>GPT Movie search</button>
+          <button className='bg-green-900 p-2 m-4 rounded-lg' onClick={handleGptSearch}>{gpt.showGptSearch ? 'Home Page' :'GPT Movie search'}</button>
           <span>{user?.displayName}</span>
           <img 
             className='w-14 h-14'
