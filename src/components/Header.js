@@ -2,8 +2,10 @@ import { onAuthStateChanged, signOut } from 'firebase/auth';
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { AVATAR, LOGO } from '../utils/constant';
+import { preferredLangauge } from '../utils/configSlice';
+import { AVATAR, LANGUAGES, LOGO } from '../utils/constant';
 import { auth } from '../utils/firebase';
+import { toggleGptSearchView } from '../utils/gptSlice';
 import { addUser, removeUser } from '../utils/userSlice';
 
 const Header = () => {
@@ -16,6 +18,12 @@ const Header = () => {
     }).catch((error) => {
       // An error happened.
     });
+  }
+  const handleGptSearch = () => {
+    dispatch(toggleGptSearchView());
+  }
+  const handleLanguageChange = (value) => {
+    dispatch(preferredLangauge(value))
   }
   useEffect(()=>{
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -41,6 +49,16 @@ const Header = () => {
           src={LOGO} alt='logo' 
         />
         {user && <div className='flex'>
+          <select onChange={(e) => handleLanguageChange(e.target.value)} className='h-[50%] mt-6'>
+            {/* {LANGUAGES.map((lang) => (
+              <option value={lang.value}>{lang.identifier}</option>
+            )} */}
+            {LANGUAGES.map((lang)=>(
+              <option value={lang.value}>{lang.identifier}</option>)
+            )}
+            
+          </select>
+          <button className='bg-green-900 p-2 m-4 rounded-lg' onClick={handleGptSearch}>GPT Movie search</button>
           <span>{user?.displayName}</span>
           <img 
             className='w-14 h-14'
