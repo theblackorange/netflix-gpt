@@ -44,9 +44,9 @@ const Header = () => {
     return () => unsubscribe()  
 },[])
   return (
-    <div className='absolute px-8 py-2 bg-gradient-to-b from-black w-[100%] z-10 flex justify-between'>
+    <div className='absolute px-8 py-2 bg-gradient-to-b from-black w-[100%] z-10 flex flex-col md:flex-row justify-between'>
         <img
-          className='w-52' 
+          className='w-52 mx-auto md:mx-0' 
           src={LOGO} alt='logo' 
         />
         {user && <div className='flex'>
@@ -60,13 +60,13 @@ const Header = () => {
             
           </select>
           <button className='bg-green-900 p-2 m-4 rounded-lg' onClick={handleGptSearch}>{gpt.showGptSearch ? 'Home Page' :'GPT Movie search'}</button>
-          <span>{user?.displayName}</span>
+          <span className='mt-8 text-white'>{user?.displayName}</span>
           <img 
-            className='w-14 h-14'
+            className='w-14 h-14 mt-4'
             alt='usericon'
             src={AVATAR}
           />
-          <button onClick={signout}> Sign me out </button>
+          <button onClick={signout} className='text-white'> Sign me out </button>
         </div>}
     </div>
   )

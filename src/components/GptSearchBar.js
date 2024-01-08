@@ -33,8 +33,8 @@ const GptSearchBar = () => {
         console.log(resolvedMovieDetails)
     }
   return (
-    <div className='pt-[10%] flex justify-center'>
-        <form className='bg-black w-1/2 grid grid-cols-12' onSubmit={(e) => e.preventDefault()}>
+    <div className='pt-[44%] md:pt-[10%] flex justify-center'>
+        <form className='w-full bg-black md:w-1/2 grid grid-cols-12' onSubmit={(e) => e.preventDefault()}>
             <input type='text' ref={searchText} placeholder={lang[preferredLangauge].searchPlaceholder} className='p-4 m-4 col-span-9'/>
             <button className='py-2 px-4 bg-red-700 text-white rounded-lg col-span-3 m-4' onClick={handleGptSearchClick}>{lang[preferredLangauge].search}</button>
         </form>

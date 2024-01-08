@@ -4,7 +4,7 @@ import MovieCard from './MovieCard'
 const MovieList = ({title, movies}) => {
   return (
     <div className='px-2 bg-black'>
-        <h1 className='text-3xl p-6 text-white'>{title}</h1>   
+        <h1 className='md:text-3xl text-lg p-6 text-white'>{title}</h1>   
         <div className='flex overflow-x-scroll'> 
             <div className='flex gap-2 p-2'>
                 {movies && movies.map(movie => (
